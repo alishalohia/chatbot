@@ -1,0 +1,40 @@
+# A very simple Flask Hello World app for you to get started with...
+
+from flask import Flask,request
+from nltk.chat.util import Chat,reflections
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello from Flask!'
+@app.route("/user")
+def alisha(n):
+    return '''<h1>python</h1>
+    <p> helloooooo </p>'''
+
+@app.route("/user/<n>")
+def alishas(n):
+    return "alisha "+ n
+
+@app.route("/chatbot", methods = ['get','post'])
+def project():
+    qapairs=((r'(.*)diwali vacation(.*)',('3&4 november','3 to 4 november')),)
+    cb=Chat(qapairs,reflections)
+
+    value=''
+    if request.method=='GET':
+        value = request.args.get("inp")
+        if value:
+            value = cb.respond(value)
+        else:
+            value = ''
+    return '''<html>
+            <body>
+            <form method="get">
+            <input type="text" name="inp">
+            <input type ="submit" value = "send">
+            <p>{}</p>
+            </form>
+            </body>
+            </html>'''.format(value)
